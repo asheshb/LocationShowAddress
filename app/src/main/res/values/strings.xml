@@ -10,7 +10,7 @@
     </string>
 
     <string name="location_info">Latitude: %1$f\nLongitude: %2$f</string>
-
+    <string name="last_location_address">Last Location Address</string>
 
 
 </resources>
