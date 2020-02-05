@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Location Show Address</string>
+
+    <string name="location_permission_rationale">The location permission is required for the app to
+        function properly. Please grant the permission.</string>
+    <string name="location_permission_denied">The permission to access location was denied.</string>
+
+    <string name="no_location_found">
+        No location found. Please check if the &quot;location&quot; is enabled on your device.
+    </string>
+
+    <string name="location_info">Latitude: %1$f\nLongitude: %2$f</string>
+
+
+
+</resources>
