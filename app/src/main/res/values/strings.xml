@@ -12,5 +12,10 @@
     <string name="location_info">Latitude: %1$f\nLongitude: %2$f</string>
     <string name="last_location_address">Last Location Address</string>
 
+    <string name="address_not_found">\nAddress not found for the location</string>
+    <string name="fetching_location">\nFetching location..</string>
+    <string name="fetching_address">\nFetching address..</string>
+    <string name="ok">OK</string>
+
 
 </resources>

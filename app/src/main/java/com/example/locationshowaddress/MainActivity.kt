@@ -1,11 +1,16 @@
 package com.example.locationshowaddress
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
@@ -16,14 +21,35 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(contxt: Context?, intent: Intent?) {
+            when (intent?.action) {
+                BROADCAST_ACTION_LOCATION_ADDRESS -> {
+                    val addressResult: AddressResult? = intent.getParcelableExtra(LOCATION_DATA_EXTRA)
+                    addressResult?.let{
+                        if(it.status){
+                            last_location_address.append("\n"+ it.data ?: getString(R.string.address_not_found))
+                        } else{
+                            last_location_address.append("\n"+ addressResult.data)
+                        }
+                    }
+
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(broadcastReceiver, IntentFilter(BROADCAST_ACTION_LOCATION_ADDRESS))
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         get_last_location_address.setOnClickListener {
+            last_location_address.text = getString(R.string.fetching_location)
             getLastLocationAddress()
         }
 
@@ -47,6 +73,9 @@ class MainActivity : AppCompatActivity() {
                         val pos = LatLong(it.latitude, it.longitude)
                         last_location_address.text = getString(R.string.location_info,
                             pos.latitude, pos.longitude)
+                        last_location_address.append(getString(R.string.fetching_address))
+                        fetchAddressFromLocation(pos)
+
                     }
                 } else {
                     last_location_address.text = getString(R.string.no_location_found)
@@ -54,12 +83,19 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
+    private fun fetchAddressFromLocation(pos: LatLong){
+        val intent = Intent(this, LocationAddressIntentService::class.java).apply {
+            putExtra(LOCATION_DATA_EXTRA, pos)
+        }
+        startService(intent)
+    }
+
     private fun requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)) {
             val snack = Snackbar.make(container, R.string.location_permission_rationale,
                 Snackbar.LENGTH_INDEFINITE)
-            snack.setAction("OK") {
+            snack.setAction(getString(R.string.ok)) {
                 ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
                     PERMISSION_REQUEST_COARSE_LOCATION)
@@ -83,5 +119,12 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT). show()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        LocalBroadcastManager.getInstance(this)
+            .unregisterReceiver(broadcastReceiver)
     }
 }
