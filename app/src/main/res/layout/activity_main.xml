@@ -30,7 +30,8 @@
         android:singleLine="false"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="123, Mountain View" />
+        tools:text="Latitude: 37.3806 Longitude: -122.0826" />
 </androidx.constraintlayout.widget.ConstraintLayout>
