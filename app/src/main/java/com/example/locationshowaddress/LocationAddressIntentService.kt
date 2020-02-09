@@ -24,9 +24,7 @@ class LocationAddressIntentService: IntentService("LocationAddressIntentService"
         latLong ?: return
 
         val geocoder = Geocoder(this, Locale.getDefault())
-
         val addressResult = AddressResult()
-
         var locationAddresses: List<Address> = emptyList()
 
         try {
