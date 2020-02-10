@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 BROADCAST_ACTION_LOCATION_ADDRESS -> {
                     val addressResult: AddressResult? = intent.getParcelableExtra(LOCATION_DATA_EXTRA)
                     addressResult?.let{
-                        if(it.status){
+                        if(it.success){
                             last_location_address.append("\n"+ it.data ?: getString(R.string.address_not_found))
                         } else{
                             last_location_address.append("\n"+ addressResult.data)

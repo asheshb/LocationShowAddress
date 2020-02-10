@@ -23,8 +23,9 @@ class LocationAddressIntentService: IntentService("LocationAddressIntentService"
 
         latLong ?: return
 
-        val geocoder = Geocoder(this, Locale.getDefault())
         val addressResult = AddressResult()
+
+        val geocoder = Geocoder(this, Locale.getDefault())
         var locationAddresses: List<Address> = emptyList()
 
         try {
@@ -45,7 +46,7 @@ class LocationAddressIntentService: IntentService("LocationAddressIntentService"
                 (0..maxAddressLineIndex).map { getAddressLine(it) }
             }
             addressResult.data = addressTokens.joinToString (separator = "\n")
-            addressResult.status = true
+            addressResult.success = true
         }
 
         broadcastStatus(addressResult)
