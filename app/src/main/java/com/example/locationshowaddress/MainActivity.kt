@@ -44,9 +44,8 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful && task.result != null) {
                     task.result?.let {
-                        val pos = LatLong(it.latitude, it.longitude)
                         last_location_address.text = getString(R.string.location_info,
-                            pos.latitude, pos.longitude)
+                            it.latitude, it.longitude)
                     }
                 } else {
                     last_location_address.text = getString(R.string.no_location_found)
