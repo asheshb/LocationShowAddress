@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
             snack.show()
         } else {
             ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
                 PERMISSION_REQUEST_COARSE_LOCATION)
         }
     }
